@@ -1,10 +1,16 @@
-import { Menu } from "@mui/icons-material";
-import { AppBar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material"
+import { useState } from "react";
 import Link from "next/link"
 import { useRouter } from "next/navigation";
 
+import { Menu } from "@mui/icons-material";
+import { AppBar, Box, Button, IconButton, Toolbar, Typography } from "@mui/material"
+
+import { HeaderDrawer } from "./HeaderDrawer";
+
 export const Header = () => {
     const router = useRouter();
+    const [drawerOpen, setDrawerOpen] = useState(false);
+
     const pageTitle = "Painel B7Delivery";
 
     const handleLogout = () => {
@@ -12,7 +18,7 @@ export const Header = () => {
     }
     
     const handleDrawerToggle = () => {
-
+        setDrawerOpen(!drawerOpen);
     }
 
     return(
@@ -73,6 +79,14 @@ export const Header = () => {
                     </Box>
                 </Toolbar>
             </AppBar>   
+            <Box component="nav">
+                <HeaderDrawer 
+                    open={drawerOpen}
+                    onClose={handleDrawerToggle}
+                    title={pageTitle}
+                    onLogout={handleLogout}
+                />
+            </Box>
         </>
     )
 }
