@@ -2,13 +2,15 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { Typography, Box, TextField, Button, Alert } from "@mui/material";
+import { Typography, Box, TextField, Button, Alert, Link as Muilink } from "@mui/material";
 
 import { api } from "@/libs/api";
+import Link from "next/link";
 
 const Page = () => {
     const [error, setError] = useState("");
     const [info, setInfo] = useState("");
+    const [isRedefined, setIsRedefined] = useState(false);
     const [loading, setLoading] = useState(false);
     const [passwordField, setPasswordField] = useState("");
     const [passwordFieldConfirm, setPasswordFieldConfirm] = useState("");
@@ -29,7 +31,8 @@ const Page = () => {
         setError("");   
         setInfo("");
         setLoading(true);
-        
+        setIsRedefined(false);
+
         const result = await api.redefinePassword(passwordField, "123");
         setLoading(false);
         
@@ -39,6 +42,7 @@ const Page = () => {
             setInfo("Senha redefinida. realize o login!");
             setPasswordField("");
             setPasswordFieldConfirm("");
+            setIsRedefined(true);
         }   
     }
 
@@ -89,7 +93,7 @@ const Page = () => {
                     fullWidth
                     disabled={loading}
                 >
-                    {loading ? "Carregando..." : "Deifinir nova Senha"}
+                    {loading ? "Carregando..." : "Redefinir Senha"}
                 </Button>
 
                 {error && 
@@ -105,13 +109,17 @@ const Page = () => {
                     <Alert 
                         variant="filled" 
                         severity="success" 
-                        sx={{ mt: 3 }}
+                        sx={{ mt: 3, mb: 2 }}
                     >
                         {info}
                     </Alert>
                 }
 
             </Box>
+            
+            { isRedefined && 
+                <Muilink href="/login" component={Link} variant="button">Realizar login</Muilink>
+            }
         </>
     )
 }
