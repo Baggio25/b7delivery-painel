@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Box, Button, InputAdornment, TextField, Typography } from "@mui/material"
+import { Box, Button, CircularProgress, Grid, InputAdornment, Skeleton, TextField, Typography } from "@mui/material"
 import { Search, Refresh } from "@mui/icons-material";
 
 const Page = () => {
     const [searchInput, setSearchInput] =  useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSearchInput = () => {
 
@@ -17,7 +18,7 @@ const Page = () => {
 
     return(
         <Box sx={{ my: 3 }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box sx={{ mb: 3, display: "flex", justifyContent: "space-between" }}>
                 <Box sx={{ display: "flex", alignItems: "center"}}>
                     <Typography 
                         component="h5" 
@@ -26,24 +27,27 @@ const Page = () => {
                     >
                         Pedidos
                     </Typography>
-                    <Button 
-                        sx={{ justifyContent: { xs: "flex-start" } }}
-                        size="small"
-                    >
-                        <Refresh />
-                        <Typography
-                            component="div"
-                            sx={{
-                                color: "#555", 
-                                display: {
-                                    xs: "none", 
-                                    sm: "block"
-                                }
-                            }}
+                    {loading && <CircularProgress size={24}/>}
+                    {!loading && 
+                        <Button 
+                            sx={{ justifyContent: { xs: "flex-start" } }}
+                            size="small"
                         >
-                            Atualizar
-                        </Typography>
-                    </Button>
+                            <Refresh />
+                            <Typography
+                                component="div"
+                                sx={{
+                                    color: "#555", 
+                                    display: {
+                                        xs: "none", 
+                                        sm: "block"
+                                    }
+                                }}
+                            >
+                                Atualizar
+                            </Typography>
+                        </Button>
+                    }
                 </Box>
                 <TextField
                     value={searchInput}
@@ -51,6 +55,7 @@ const Page = () => {
                     onKeyUp={handleSearchKey}
                     placeholder="Pesquise um pedido..."
                     variant="standard"
+                    disabled={loading}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end">
@@ -60,6 +65,33 @@ const Page = () => {
                     }}
                 />
             </Box>
+
+            <Grid 
+                container 
+                spacing={3} 
+                columns={{
+                    xs: 1, 
+                    sm: 2,
+                    md: 4
+                }}
+            >
+                {loading &&
+                    <>
+                        <Grid item xs={1}>
+                            <Skeleton variant="rectangular" height={220} />
+                        </Grid>
+                        <Grid item xs={1}>
+                            <Skeleton variant="rectangular" height={220} />
+                        </Grid>
+                        <Grid item xs={1}>
+                            <Skeleton variant="rectangular" height={220} />
+                        </Grid>
+                        <Grid item xs={1}>
+                            <Skeleton variant="rectangular" height={220} />
+                        </Grid>
+                    </>
+                }
+            </Grid>
         </Box>
     )
 }
