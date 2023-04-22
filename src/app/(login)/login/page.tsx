@@ -5,8 +5,10 @@ import Link from "next/link";
 import { Typography, Box, TextField, Button, Link as MuiLink, Alert } from "@mui/material";
 
 import { api } from "@/libs/api";
+import { useRouter } from "next/navigation";
 
 const Page = () => {
+    const router = useRouter();
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const [emailField, setEmailField] = useState("");
@@ -24,10 +26,13 @@ const Page = () => {
         setLoading(true);
         
         const result = await api.login(emailField, passwordField );
-        setLoading(false);
         
         if(result.error) {
+            setLoading(false);
             setError(result.error);
+        }else {
+            router.push("/");
+            setLoading(false);
         }
     }
 
