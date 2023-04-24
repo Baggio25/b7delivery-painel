@@ -7,6 +7,7 @@ import { Search, Refresh } from "@mui/icons-material";
 import { Order } from "@/types/Order";
 import { api } from "@/libs/api";
 import { OrderItem } from "@/components/OrderItem";
+import { OrderStatus } from "@/types/OrderStatus";
 
 const Page = () => {
     const [searchInput, setSearchInput] =  useState("");
@@ -33,6 +34,11 @@ const Page = () => {
 
     const handleSearchKey = () => {
 
+    }
+
+    const handleChangeStatus = async (id: number, newStatus: OrderStatus) => {
+        await api.changeOrderStatus(id, newStatus);
+        getOrders;
     }
 
     return(
@@ -114,7 +120,10 @@ const Page = () => {
 
                 {!loading && orders.map((item, index) => (
                     <Grid key={index} item xs={1}>
-                        <OrderItem item={item}/>
+                        <OrderItem 
+                            item={item}
+                            onChangeStatus={handleChangeStatus}    
+                        />
                     </Grid>
                 ))}
             </Grid>

@@ -87,6 +87,10 @@ export const api = {
                 resolve(orders);
             }, 1000);
         });
+    },
+
+    changeOrderStatus: async ( id: number, newStatus: OrderStatus) => {
+        return true;
     }
 
 }
