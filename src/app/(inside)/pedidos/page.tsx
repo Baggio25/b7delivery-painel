@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { KeyboardEvent, useEffect, useState } from "react";
 import { Box, Button, CircularProgress, Grid, InputAdornment, Skeleton, TextField, Typography } from "@mui/material"
 import { Search, Refresh } from "@mui/icons-material";
 
@@ -13,6 +13,7 @@ const Page = () => {
     const [searchInput, setSearchInput] =  useState("");
     const [loading, setLoading] = useState(false);
     const [orders, setOrders] = useState<Order[]>([]);
+    const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
 
     const getOrders = async () => {
         setSearchInput("");
@@ -27,13 +28,29 @@ const Page = () => {
     useEffect(() => {
         getOrders();
     }, []);
+    
+    useEffect(() => {
+        setSearchInput("");
+        setFilteredOrders(orders);
+    }, [orders]);
 
-    const handleSearchInput = () => {
+    const handleSearchKey = (event: KeyboardEvent<HTMLInputElement>) => {
+        console.log(event.code)
+        if((event.code.toLocaleLowerCase() === "enter") || (event.code.toLocaleLowerCase() === "numpadenter")) {
+            if(searchInput != "") {
+                let newOrders: Order[] = [];
 
-    }
+                for(let i in orders) {
+                    if(orders[i].id.toString() === searchInput) {
+                        newOrders.push(orders[i]);
+                    } 
+                }
 
-    const handleSearchKey = () => {
-
+                setFilteredOrders(newOrders);
+            }else {
+                setFilteredOrders(orders);
+            }
+        }
     }
 
     const handleChangeStatus = async (id: number, newStatus: OrderStatus) => {
@@ -77,7 +94,7 @@ const Page = () => {
                 </Box>
                 <TextField
                     value={searchInput}
-                    onChange={handleSearchInput}
+                    onChange={e => setSearchInput(e.target.value)}
                     onKeyUp={handleSearchKey}
                     placeholder="Pesquise um pedido..."
                     variant="standard"
@@ -118,7 +135,7 @@ const Page = () => {
                     </>
                 }
 
-                {!loading && orders.map((item, index) => (
+                {!loading && filteredOrders.map((item, index) => (
                     <Grid key={index} item xs={1}>
                         <OrderItem 
                             item={item}
