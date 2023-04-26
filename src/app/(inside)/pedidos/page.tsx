@@ -1,13 +1,14 @@
 "use client";
 
 import { KeyboardEvent, useEffect, useState } from "react";
-import { Box, Button, CircularProgress, Grid, InputAdornment, Skeleton, TextField, Typography } from "@mui/material"
+import { Box, Button, CircularProgress, Divider, Grid, InputAdornment, Skeleton, TextField, Typography } from "@mui/material"
 import { Search, Refresh } from "@mui/icons-material";
 
 import { Order } from "@/types/Order";
 import { api } from "@/libs/api";
 import { OrderItem } from "@/components/OrderItem";
 import { OrderStatus } from "@/types/OrderStatus";
+import { dateFormat } from "@/libs/dateFormat";
 
 const Page = () => {
     const [searchInput, setSearchInput] =  useState("");
@@ -156,7 +157,45 @@ const Page = () => {
                 </Grid>
             </Box>
             <Box sx={{ display: "none", displayPrint: "block" }}>
-                ...
+                {printOrder && 
+                    <>
+                        <Typography sx={{mt:3, mb: 1}} component="h5" variant="h5">Pedido</Typography>
+                        <Box>ID: #{printOrder.id}</Box>
+                        <Box>Data do Pedido: {dateFormat(printOrder.orderDate)}</Box>
+                        <Box sx={{mb: 2}}>Cliente: {printOrder.userName}</Box>
+                        
+                        <Divider />
+                        
+                        <Typography sx={{mt: 2, mb: 1}} component="h5" variant="h5">Pagamento</Typography>
+                        <Box>Tipo de Pagamento: {printOrder.paymentType === "card" ? "Cartão" : "Dinheiro"}</Box>
+                        <Box>Subtotal: R$ {printOrder.subtotal.toFixed(2)}</Box>
+                        <Box>Entrega: R$ {printOrder.shippingPrice.toFixed(2)}</Box>
+                        {printOrder.cupomDiscount && 
+                            <Box>Desconto: -R$ {printOrder.cupomDiscount.toFixed(2)}</Box>
+                        }
+                        <Box sx={{mb: 1}}>Total: R$ {printOrder.total.toFixed(2)}</Box>
+
+                        <Divider />
+                        
+                        <Typography sx={{mt: 2, mb: 1}} component="h5" variant="h5">Endereço</Typography>
+                        <Box>Rua: {printOrder.shippingAddress.address} </Box>
+                        <Box>Número: {printOrder.shippingAddress.number} </Box>
+                        <Box>Complemento: {printOrder.shippingAddress.complement} </Box>
+                        <Box>CEP: {printOrder.shippingAddress.cep} </Box>
+                        <Box>Bairro: {printOrder.shippingAddress.neighborhood} </Box>
+                        <Box>Cidade: {printOrder.shippingAddress.city} </Box>
+                        <Box sx={{mb: 1}}>Estado: {printOrder.shippingAddress.state} </Box>
+
+                        <Divider />
+                        
+                        <Typography sx={{mt: 2, mb: 1}} component="h5" variant="h5">Itens</Typography>
+                        {printOrder.products.map((item, index) => (
+                            <Box key={index}>
+                                {item.qt} x {item.product.name}
+                            </Box>
+                        ))}
+                    </>
+                }
             </Box>
         </>
     )
