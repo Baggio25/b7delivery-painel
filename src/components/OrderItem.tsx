@@ -2,6 +2,7 @@ import { Box, Button, MenuItem, Select, SelectChangeEvent, Typography } from "@m
 
 import { Order } from "@/types/Order"
 import { OrderStatus } from "@/types/OrderStatus"
+import { dateFormat } from "@/libs/dateFormat";
 
 type Props = {
     item: Order;
@@ -43,7 +44,7 @@ export const OrderItem = ({item, onChangeStatus}: Props) => {
                 }}
             >
                 <Box>
-                    <Typography component="p">{item.orderDate}</Typography>
+                    <Typography component="p">{dateFormat(item.orderDate)}</Typography>
                     <Typography component="p">{item.userName}</Typography>
                     <Button size="small" sx={{ color: "#FFF", p: 0}}>Imprimir</Button>
                 </Box>
