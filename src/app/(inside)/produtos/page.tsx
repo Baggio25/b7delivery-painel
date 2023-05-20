@@ -9,6 +9,7 @@ import { Product } from "@/types/Product";
 import { Category } from "@/types/Category";
 import { api } from "@/libs/api";
 import { ProductTableSkeleton } from "@/components/ProductTableSkeleton";
+import { ProductTableItem } from "@/components/ProductTableItem";
 
 const Page = () => {
 
@@ -30,6 +31,14 @@ const Page = () => {
     }
 
     const handleNewProduct = () => {
+
+    }
+
+    const handleEditProduct = (product: Product) => {
+
+    }
+
+    const handleDeleteProduct = (product: Product) => {
 
     }
 
@@ -58,7 +67,7 @@ const Page = () => {
                             <TableCell>NOME</TableCell>
                             <TableCell sx={{ display: { xs: 'none', md: 'table-cell'} }}>PREÇO</TableCell>
                             <TableCell sx={{ display: { xs: 'none', md: 'table-cell'} }}>CATEGORIA</TableCell>
-                            <TableCell sx={{ sx: 50, md: 130 }} >AÇÕES</TableCell>
+                            <TableCell sx={{ width: { sx: 50, md: 130 }}}>AÇÕES</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -69,6 +78,14 @@ const Page = () => {
                                 <ProductTableSkeleton />
                             </>
                         }
+                        {!loading && products.map(item => (
+                            <ProductTableItem 
+                                key={item.id}
+                                item={item}
+                                onEdit={handleEditProduct}
+                                onDelete={handleDeleteProduct}
+                            />
+                        ))}
                     </TableBody>
                 </Table>  
             </Box>
