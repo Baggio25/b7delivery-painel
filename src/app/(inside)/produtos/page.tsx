@@ -8,6 +8,7 @@ import { Search, Refresh } from "@mui/icons-material";
 import { Product } from "@/types/Product";
 import { Category } from "@/types/Category";
 import { api } from "@/libs/api";
+import { ProductTableSkeleton } from "@/components/ProductTableSkeleton";
 
 const Page = () => {
 
@@ -61,7 +62,13 @@ const Page = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-
+                        {loading && 
+                            <>
+                                <ProductTableSkeleton />
+                                <ProductTableSkeleton />
+                                <ProductTableSkeleton />
+                            </>
+                        }
                     </TableBody>
                 </Table>  
             </Box>
