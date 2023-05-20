@@ -5,9 +5,28 @@ import { Box, Button, CircularProgress, Divider, Grid, InputAdornment, Skeleton,
     Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { Search, Refresh } from "@mui/icons-material";
 
+import { Product } from "@/types/Product";
+import { Category } from "@/types/Category";
+import { api } from "@/libs/api";
+
 const Page = () => {
 
     const [loading, setLoading] = useState(false);
+    const [products, setProducts] = useState<Product[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
+
+    useEffect(() => {
+        getProducts();
+    }, []);
+
+    const getProducts = async () => {
+        setLoading(true);
+
+        setProducts(await api.getProducts());
+        setCategories(await api.getCategories());
+
+        setLoading(false);
+    }
 
     const handleNewProduct = () => {
 
